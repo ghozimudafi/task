@@ -87,7 +87,7 @@ const Config = () => {
             </TableBody>
           </Table>
         </div> */}
-        {/* <DataTableDemo /> */}
+        <DataTableDemo />
         {/* <div className="flex">
           <span></span>
           <Pagination>
