@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 "use client";
 
 import * as React from "react";
@@ -36,106 +37,95 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faRectangleXmark,
-  faSquareCheck,
-} from "@fortawesome/free-solid-svg-icons";
+
+import { useState, useEffect } from "react";
+
+let nextId = 1;
+
+interface Item {
+  id: number;
+  name: string;
+  account: string;
+  remark: string;
+  status: string;
+  selected: boolean;
+}
 
 const data: Payment[] = [
   {
+    no: nextId++,
     id: "m5gr84i9",
     amount: 316,
     name: "success",
     email: "ken99@yahoo.com",
   },
   {
+    no: nextId++,
     id: "3u1reuv4",
     amount: 242,
     name: "success",
     email: "Abe45@gmail.com",
   },
   {
+    no: nextId++,
     id: "derv1ws0",
     amount: 837,
     name: "processing",
     email: "Monserrat44@gmail.com",
   },
   {
+    no: nextId++,
     id: "5kma53ae",
     amount: 874,
     name: "success",
     email: "Silas22@gmail.com",
   },
   {
+    no: nextId++,
     id: "bhqecj4p",
     amount: 721,
     name: "failed",
     email: "carmella@hotmail.com",
   },
   {
+    no: nextId++,
     id: "bhqecj4p",
     amount: 721,
     name: "failed",
     email: "carmella@hotmail.com",
   },
   {
+    no: nextId++,
     id: "bhqecj4p",
     amount: 721,
     name: "failed",
     email: "carmella@hotmail.com",
   },
   {
+    no: nextId++,
     id: "bhqecj4p",
     amount: 721,
     name: "failed",
     email: "carmella@hotmail.com",
   },
   {
+    no: nextId++,
     id: "bhqecj4p",
     amount: 721,
     name: "failed",
     email: "carmella@hotmail.com",
   },
   {
+    no: nextId++,
     id: "bhqecj4p",
     amount: 721,
     name: "failed",
-    email: "carmella@hotmail.com",
-  },
-  {
-    id: "bhqecj4p",
-    amount: 721,
-    name: "sukses",
-    email: "carmella@hotmail.com",
-  },
-  {
-    id: "bhqecj4p",
-    amount: 721,
-    name: "gagal",
-    email: "carmella@hotmail.com",
-  },
-  {
-    id: "bhqecj4p",
-    amount: 721,
-    name: "gagal",
-    email: "carmella@hotmail.com",
-  },
-  {
-    id: "bhqecj4p",
-    amount: 721,
-    name: "gagal",
-    email: "carmella@hotmail.com",
-  },
-  {
-    id: "bhqecj4p",
-    amount: 721,
-    name: "gagal",
     email: "carmella@hotmail.com",
   },
 ];
 
 export type Payment = {
+  no: number;
   id: string;
   amount: number;
   name: string;
@@ -143,27 +133,32 @@ export type Payment = {
 };
 
 export const columns: ColumnDef<Payment>[] = [
+  // {
+  //   id: "select",
+  //   header: ({ table }) => (
+  //     <Checkbox
+  //       checked={
+  //         table.getIsAllPageRowsSelected() ||
+  //         (table.getIsSomePageRowsSelected() && "indeterminate")
+  //       }
+  //       onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+  //       aria-label="Select all"
+  //     />
+  //   ),
+  //   cell: ({ row }) => (
+  //     <Checkbox
+  //       checked={row.getIsSelected()}
+  //       onCheckedChange={(value) => row.toggleSelected(!!value)}
+  //       aria-label="Select row"
+  //     />
+  //   ),
+  //   enableSorting: false,
+  //   enableHiding: false,
+  // },
   {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
+    accessorKey: "no",
+    header: "#",
+    cell: ({ row }) => <div className="capitalize">{row.getValue("no")}</div>,
   },
   {
     accessorKey: "name",
@@ -234,6 +229,14 @@ export const columns: ColumnDef<Payment>[] = [
 ];
 
 export function DataTableDemo() {
+  const [selectedItems, setSelectedItems] = useState<Item[]>([]);
+
+  useEffect(() => {
+    const storedItems = localStorage.getItem("selectedItems");
+    const items: Item[] = storedItems ? JSON.parse(storedItems) : [];
+    setSelectedItems(items);
+  }, []);
+
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -303,12 +306,17 @@ export function DataTableDemo() {
                     key={row.id}
                     data-state={row.getIsSelected() && "selected"}
                   >
-                    {row.getVisibleCells().map((cell) => (
+                    {/* {row.getVisibleCells().map((cell) => (
                       <TableCell key={cell.id}>
                         {flexRender(
                           cell.column.columnDef.cell,
                           cell.getContext()
                         )}
+                      </TableCell>
+                    ))} */}
+                    {selectedItems.map((item) => (
+                      <TableCell key={item.id}>
+                        {item.name},{item.account},{item.remark},
                       </TableCell>
                     ))}
                   </TableRow>

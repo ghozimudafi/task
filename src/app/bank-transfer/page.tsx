@@ -5,22 +5,12 @@ import { faArrowsRotate } from "@fortawesome/free-solid-svg-icons";
 
 import { Button } from "@/components/ui/button";
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link";
 import {
   Card,
@@ -28,60 +18,61 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useForm, FormProvider } from "react-hook-form";
-import { SetStateAction, useEffect, useState } from "react";
+import { useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { useRouter } from "next/router";
 
-const AddBank = () => {
-  const form = useForm();
-  // const [name, setName] = useState("");
-  // const [account, setAccount] = useState("");
-  // const [remark, setRemark] = useState("");
-  // const [status, setStatus] = useState("");
+export default function AddBank() {
+  // const router = useRouter();
 
-  // function inputValue() {
-  //   var name = document.getElementById("name");
-  //   document.getElementById("result")?.innerText = "name " + name;
-  // }
+  const [items, setItems] = useState<Item[]>([]);
+  const [name, setName] = useState<string>("");
+  const [account, setAccount] = useState<string>("");
+  const [remark, setRemark] = useState<string>("");
+  const [status, setStatus] = useState<Item[]>([
+    { id: 1, status: "Active", selected: false, name, account, remark },
+  ]);
 
-  const { register, handleSubmit } = useForm();
-  const [result, setResult] = useState("");
-  const onSubmit = (data: any) => setResult(JSON.stringify(data));
+  interface Item {
+    id: number;
+    name: string;
+    account: string;
+    remark: string;
+    status: string;
+    selected: boolean;
+  }
 
-  // useEffect(() => {
-  //   if (typeof window !== "undefined") {
-  //     const savedName = localStorage.getItem("name");
-  //     if (savedName) {
-  //       setName(savedName);
-  //     }
-  //   }
-  // }),
-  //   [];
-
-  const handleInputChange = (e: any) => {
-    register(e.target.value);
+  const handleCheckboxChange = (id: number) => {
+    const updatedItems = items.map((item) =>
+      item.id === id ? { ...item, selected: !item.selected } : item
+    );
+    setItems(updatedItems);
   };
 
-  // const handleSubmit = (e: any, data: any) => {
-  //   console.log(e);
-
-  //   e.preventDefault();
-  //   if (typeof window !== "undefined") {
-  //     localStorage.setItem("name", name);
-  //   }
-  //   alert("Name" + +"saved to local storage");
-  //   setName("");
-  //   setAccount("");
-  //   setRemark("");
-  //   setStatus("");
-  // };
+  const addItem = () => {
+    const newItem: Item = {
+      id: items.length + 1,
+      name,
+      account,
+      remark,
+      status: "",
+      selected: false,
+    };
+    const selectedItems = items.filter((item) => item.selected);
+    localStorage.setItem("selectedItems", JSON.stringify(selectedItems));
+    setItems([...items, newItem]);
+    setName("");
+    setAccount("");
+    setRemark("");
+  };
 
   const handleBack = () => {
     window.history.back();
   };
 
   return (
-    <div className="h-[698px] w-auto border-solid border-2 border-black m-3 p-5 rounded-[5px">
+    <div className="h-[698px] w-auto border-solid border-2 border-black m-3 p-5 rounded-[5px]">
       <div>
         <Breadcrumb className="hidden md:flex">
           <BreadcrumbList>
@@ -121,89 +112,45 @@ const AddBank = () => {
 
         <div className=" w-[100%] justify-center border-[2px] mt-[10px] border-solid border-black flex"></div>
         <div className="h-auto w-[100%] justify-center flex mt-[25px]">
-          <FormProvider {...form}>
-            <form
-              action={"/config-bank"}
-              className="space-y-8"
-              onSubmit={handleSubmit(onSubmit)}
-            >
-              <FormField
-                control={form.control}
-                name="bankname"
-                render={({ field }) => (
-                  <FormItem className="flex">
-                    <FormLabel className="w-[200px] mt-[20px]">
-                      Bank Name
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Bank Name"
-                        id="name"
-                        {...register("name")}
-                        // onChange={handleInputChange}
-                        {...field}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
+          <form>
+            <div className="w-[500px] flex  mt-[10px]">
+              <Label className="w-[200px] mt-[12px]">Bank Name </Label>
+              <Input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Enter item name"
               />
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem className="flex">
-                    <FormLabel className="w-[200px] mt-[20px]">
-                      Bank Account
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Bank Account"
-                        id="email"
-                        {...register("email")}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+            </div>
+            <div className="w-[500px] flex  mt-[10px]">
+              <Label className="w-[200px] mt-[12px]">Account </Label>
+              <Input
+                type="text"
+                value={account}
+                onChange={(e) => setAccount(e.target.value)}
+                placeholder="Enter item account"
               />
-              <FormField
-                control={form.control}
-                name="id"
-                render={({ field }) => (
-                  <FormItem className="flex">
-                    <FormLabel className="w-[200px] mt-[20px]">
-                      Remark Pattern
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Remark Pattern"
-                        id="id"
-                        {...register("id")}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+            </div>
+            <div className="w-[500px] flex  mt-[10px]">
+              <Label className="w-[200px] mt-[12px]">Remark Pattern </Label>
+              <Input
+                type="text"
+                value={remark}
+                onChange={(e) => setRemark(e.target.value)}
+                placeholder="Enter item remark"
               />
-              <FormField
-                control={form.control}
-                name="active"
-                render={({ field }) => (
-                  <FormItem className="ml-[130px] flex">
-                    <FormControl className="mt-[7px]">
-                      <Checkbox id="status" value={status} />
-                    </FormControl>
-                    <FormLabel className="ml-[10px]">Active</FormLabel>
-                  </FormItem>
-                )}
-              />
-              {/* <button type="submit">save</button> */}
-            </form>
-          </FormProvider>
+            </div>
+            {/* {items.map((item) => (
+              <div className="w-[500px] flex  mt-[10px]" key={item.id}>
+                <Checkbox
+                  value={status}
+                  onChange={() => handleCheckboxChange(item.id)}
+                />
+                <Label className="ml-[15px]">Active </Label>
+              </div>
+            ))} */}
+          </form>
         </div>
-        <p>{result}</p>
       </Card>
       <div className="flex justify-end m-[15px]">
         <Button
@@ -221,12 +168,21 @@ const AddBank = () => {
           type="submit"
           variant="secondary"
           id="input"
+          onClick={addItem}
         >
           save
         </Button>
       </div>
+      <ul>
+        {items.map((items) => (
+          <>
+            <li key={items.id}>{items.name}</li>
+            <li>{items.account}</li>
+            <li>{items.remark}</li>
+            <li>{items.status}</li>
+          </>
+        ))}
+      </ul>
     </div>
   );
-};
-
-export default AddBank;
+}
