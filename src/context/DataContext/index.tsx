@@ -5,6 +5,7 @@ interface Item {
   name: string;
   account: string;
   remark: string;
+  status: "Aktif";
 }
 
 interface DataContextType {

@@ -25,11 +25,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface Item {
   name: string;
   account: string;
   remark: string;
+  status: "Aktif";
 }
 
 export default function InputPage() {
@@ -122,13 +124,20 @@ export default function InputPage() {
             </div>
             <div className="w-[500px] flex mt-[10px] ml-[100px] ">
               <Label className="w-[200px] mt-[12px]">Remark Pattern</Label>
-              <Input
-                {...register("remark", { required: true })}
-                placeholder=""
-              />
+              <Input {...register("remark")} placeholder="" />
               {errors.remark && (
                 <span style={{ color: "red" }}>This field is required</span>
               )}
+            </div>
+            <div className="w-[500px] flex mt-[10px] ml-[100px] ">
+              <div className="flex ml-[140px]">
+                <Input
+                  type="checkbox"
+                  {...register("status")}
+                  className="mt-[12px] mr-[10px]"
+                />
+                <Label className="w-[200px] mt-[12px]">Active</Label>
+              </div>
             </div>
           </form>
         </div>

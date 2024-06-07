@@ -28,19 +28,20 @@ const Config = () => {
   //   { name: "Michael Brown", account: 45, remark: "CEO" },
   // ];
 
-  // const columns = [
-  //   { title: "No", data: "no" },
-  //   { title: "Name Bank", data: "name" },
-  //   { title: "Account", data: "account" },
-  //   { title: "Remark Pattern", data: "remark" },
-  //   {
-  //     title: "Action",
-  //     data: "action",
-  //     render: (savedData: any, type: any, row: { name: any }) => {
-  //       return `<button onClick="alert('Edit ${row.name}')">Edit</button>`;
-  //     },
-  //   },
-  // ];
+  const columns = [
+    { title: "#", data: "no" },
+    { title: "NAME BANK", data: "name" },
+    { title: "ACCOUNT", data: "account" },
+    { title: "REMARK PATTERN", data: "remark" },
+    { title: "ACTIVE", data: "status" },
+    {
+      title: "ACTION",
+      data: "action",
+      render: (savedData: any, type: any, row: { name: any }) => {
+        return `<button onClick="alert('Edit ${row.name}')">Edit</button>`;
+      },
+    },
+  ];
 
   const tableRef = useRef<HTMLTableElement>(null);
 
@@ -71,7 +72,7 @@ const Config = () => {
     return () => {
       table.destroy();
     };
-  }, [savedData]);
+  }, [savedData, columns]);
 
   return (
     <div className="h-[698px] w-auto border-solid border-2 border-black m-3 p-5 rounded-[5px] ">
@@ -121,19 +122,22 @@ const Config = () => {
           <thead className="text-xs text-gray-700 uppercase bg-gray-50">
             <tr>
               <th scope="col" className="p-4">
-                No
+                #
               </th>
               <th scope="col" className="p-4">
-                Name Bank
+                NAME BANK
               </th>
               <th scope="col" className="p-4">
-                Account
+                ACCOUNT
               </th>
               <th scope="col" className="p-4">
-                Remark Pattern
+                REMARK PATTERN
               </th>
               <th scope="col" className="p-4">
-                Action
+                ACTIVE
+              </th>
+              <th scope="col" className="p-4">
+                ACTION
               </th>
             </tr>
           </thead>
@@ -154,6 +158,7 @@ const Config = () => {
                 </th>
                 <td className="w-4 p-4">{data.account}</td>
                 <td className="w-4 p-4">{data.remark}</td>
+                <td className="w-4 p-4">{data.status}</td>
                 <td className="w-4 p-4"></td>
               </tr>
             ))}
