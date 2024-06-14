@@ -14,11 +14,16 @@ import { Button } from "@/components/ui/button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTags } from "@fortawesome/free-solid-svg-icons";
 import $ from "jquery";
-import "datatables.net";
-import "datatables.net-dt";
-import "datatables.net-responsive-dt";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
+import DataTable from 'datatables.net-dt';
+import 'datatables.net-fixedcolumns-dt';
+import 'datatables.net-fixedheader-dt';
+import 'datatables.net-keytable-dt';
+import 'datatables.net-responsive-dt';
+import 'datatables.net-rowgroup-dt';
+import 'datatables.net-rowreorder-dt';
+import 'datatables.net-scroller-dt';
+import 'datatables.net-searchpanes-dt';
+import 'datatables.net-staterestore-dt';
 
 const Config = () => {
   const { savedData } = useContext(DataContext);
@@ -46,17 +51,18 @@ const Config = () => {
   const tableRef = useRef<HTMLTableElement>(null);
 
   useEffect(() => {
-    const table = $("#tableBank").DataTable({
+    const table = $("#example").DataTable({
       savedData,
+      stateSave: true,
       paging: true,
       pagingType: "full_numbers",
       searching: true,
+      scroller: true,
       ordering: true,
       pageLength: 10,
       lengthChange: true,
-      dom: "lBrtip",
       language: {
-        search: "Cari:",
+        search: "Search:",
         lengthMenu: "Tampilkan _MENU_ baris",
         info: "Menampilkan _START_ ke _END_ dari _TOTAL_ baris",
       },
@@ -75,7 +81,7 @@ const Config = () => {
   }, [savedData, columns]);
 
   return (
-    <div className="h-[698px] w-auto border-solid border-2 border-black m-3 p-5 rounded-[5px] ">
+    <div className="h-[615px] w-auto border-solid border-2 border-black m-3 p-5 rounded-[5px] ">
       <div>
         <Breadcrumb className="hidden md:flex">
           <BreadcrumbList>
@@ -109,14 +115,10 @@ const Config = () => {
         </Button>
       </Card>
       <div className="h-[400px] w-auto border-solid border-2 border-black rounded-[5px] p-[20px] mt-5">
-        <div className="relative mt-1 justify-end flex">
-          <Label className="mt-[12px] mr-[25px]">Search :</Label>
-          <Input className="w-[300px]" />
-        </div>
+        
         <table
-          id="tableBank"
-          ref={tableRef}
-          className="w-full text-sm text-left rtl:text-right"
+          id="example"
+          className="w-full text-sm text-left rtl:text-right overflow-auto"
           width="100%"
         >
           <thead className="text-xs text-gray-700 uppercase bg-gray-50">
@@ -164,13 +166,14 @@ const Config = () => {
             ))}
           </tbody>
         </table>
-        <nav
-          className="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4"
-          aria-label="Table navigation"
-        ></nav>
+
         {/* <DataTableDemo /> */}
         {/* <DataTable data={savedData} columns={columns} /> */}
       </div>
+      <link rel="stylesheet" href="/style/datatables.css" />
+      <link rel="stylesheet" href="/style/datatables.min.css" />
+      <script src="/js/datatables.js"></script>
+      <script src="/js/datatables.min.js"></script>
     </div>
   );
 };

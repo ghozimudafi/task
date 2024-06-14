@@ -64,7 +64,7 @@ export default function InputPage() {
   };
 
   return (
-    <div className="h-[698px] w-auto border-solid border-2 border-black m-3 p-5 rounded-[5px]">
+    <div className="h-[615px] w-auto border-solid border-2 border-black m-3 p-5 rounded-[5px]">
       <div>
         <Breadcrumb className="hidden md:flex">
           <BreadcrumbList>
@@ -131,8 +131,7 @@ export default function InputPage() {
             </div>
             <div className="w-[500px] flex mt-[10px] ml-[100px] ">
               <div className="flex ml-[140px]">
-                <Input
-                  type="checkbox"
+                <Checkbox
                   {...register("status")}
                   className="mt-[12px] mr-[10px]"
                 />
